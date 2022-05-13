@@ -8,6 +8,8 @@ const { precacheAndRoute } = require('workbox-precaching/precacheAndRoute');
 
 precacheAndRoute(self.__WB_MANIFEST);
 
+// offlineFallback();
+
 const pageCache = new CacheFirst({
   cacheName: 'page-cache',
   plugins: [
@@ -27,11 +29,11 @@ warmStrategyCache({
 
 registerRoute(({ request }) => request.mode === 'navigate', pageCache);
 
-// TODO: Implement asset caching
+// TODO: Implement asset caching. DONE
 registerRoute(
-  ({ request }) => request.destination === 'image',
+  ({ request }) => request.destination === 'images',
   new CacheFirst({
-    cacheName: 'my-image-cache',
+    cacheName: 'logo',
     plugins: [
       new CacheableResponsePlugin({
         statuses: [0, 200],

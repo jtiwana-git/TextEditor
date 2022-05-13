@@ -2,6 +2,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const WebpackPwaManifest = require('webpack-pwa-manifest');
 const path = require('path');
 const { InjectManifest } = require('workbox-webpack-plugin');
+const { GenerateSW } = require('workbox-webpack-plugin');
 
 // TODO: Add and configure workbox plugins for a service worker and manifest file. DONE
 // TODO: Add CSS loaders and babel to webpack. DONE
@@ -19,28 +20,29 @@ module.exports = () => {
     },
     plugins: [
       new HtmlWebpackPlugin({
-        template: './index.html',
+        template: './client/index.html',
         title: 'Webpack Plugin',
       }),
-      new WorkboxPlugin.GenerateSW(),
+      new GenerateSW(),
       new InjectManifest({
         swSrc: './client/src-sw.js',
         swDest: 'service-worker.js',
       }),
       new WebpackPwaManifest ({
-        name: 'Todos',
-        short_name: 'Todos',
-        description: "To store ALL of your Todo's",
+        name: 'Jate',
+        short_name: 'Jate',
+        description: 'Keep track of important tasks!',
+        background_color: '#7eb4e2',
+        theme_color: '#7eb4e2',
+        start_url: '/',
+        publicPath: '/',
         icons: [
           {
-            src: path.join('assets', 'images', 'logo.png'),
-            size: [96, 128, 256, 512], 
+            src: path.resolve('src/icons/logo.png'),
+            sizes: [96, 128, 192, 256, 384, 512],
+            destination: path.join('src', 'icons'),
           },
         ],
-        start_url: '/',
-        theme_color: '#C0C0C0',
-        background_color: '#000000',
-
       }),
       
     ],
@@ -57,7 +59,8 @@ module.exports = () => {
         use: {
         loader: 'babel-loader',
         options: {
-          presets: ['@babel/preset-env']
+          presets: ['@babel/preset-env'],
+          plugins: ['@babel/plugin-proposal-object-rest-spread', '@babel/transform-runtime'],
         }
       },
     },
